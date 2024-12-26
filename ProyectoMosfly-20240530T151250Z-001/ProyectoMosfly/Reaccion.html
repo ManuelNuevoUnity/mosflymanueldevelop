@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo sobre los Mosquitos - Mosfly App</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: rgb(163, 201, 159);
+
+
+        }
+        header {
+            background-color: forestgreen;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
+            height: 70px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .menu-icon {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+        }
+        nav {
+            background-color: rgb(43, 41, 41);
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        nav a {
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 0.875rem 1rem;
+            text-decoration: none;
+            font-size: 1rem;
+            margin: 0 0.625rem;
+            border: 0.1875rem solid white;
+            border-radius: 0.625rem;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        nav a:hover {
+            background-color: #555;
+            color: white;
+            transform: translateY(-3px);
+        }
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgb(43, 184, 43);
+            overflow-x: hidden;
+            overflow-y: auto;
+            transition: 0.5s;
+            padding-top: 3.75rem;
+            z-index: 1;
+            box-sizing: border-box;
+            border-radius: 10px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar a {
+            padding: 0.5rem 1rem; /* Reducir el padding */
+            margin: 0.5rem 0; /* Agregar un poco de margen entre los enlaces */
+            text-decoration: none;
+            font-size: 1.25rem;
+            color: black;
+            font-weight: bold;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+        .sidebar img {
+            display: block;
+            margin: 0 auto 1.25rem auto;
+            width: 50%;
+            border-radius: 50%;
+        }
+        .main {
+            flex: 1;
+            padding: 2rem;
+            transition: margin-left 0.5s;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: row;
+            overflow-x: auto;
+        }
+        .main::-webkit-scrollbar {
+            display: none;
+        }
+        .overlay {
+            position: fixed;
+            display: none;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        footer {
+            background-color: rgb(43, 41, 41);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 1.25rem;
+            box-sizing: border-box;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+            padding: 0.625rem 1.25rem;
+            background-color: #555;
+            border-radius: 0.3125rem;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        footer a:hover {
+            background-color: #777;
+        }
+        /* Cards */
+        .card {
+            background-color: white;
+            margin: 20px;
+            padding: 1.5rem;
+            border-radius: 10px;
+            min-width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .card h3 {
+            margin-top: 10px;
+            color: #2c3e50;
+        }
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        .card a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 0.5rem 1rem;
+            background-color: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .card a:hover {
+            background-color: #2ecc71;
+        }
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .menu-icon {
+                font-size: 1.25rem;
+                top: 10px;
+                left: 10px;
+            }
+            header h1 {
+                font-size: 1.25rem;
+            }
+            nav a {
+                padding: 0.625rem 0.75rem;
+                font-size: 0.875rem;
+            }
+            .sidebar a {
+                font-size: 1rem;
+                padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+            }
+            footer a {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+            .main {
+                flex-direction: column;
+                overflow-y: auto;
+            }
+        }
+        @media (max-width: 480px) {
+            .menu-icon {
+                font-size: 1rem;
+                top: 8px;
+                left: 8px;
+            }
+            header h1 {
+                font-size: 1rem;
+            }
+            nav a {
+                padding: 0.5rem 0.625rem;
+                font-size: 0.75rem;
+            }
+            .sidebar a {
+                font-size: 0.875rem;
+                padding: 0.375rem 0.375rem 0.375rem 1.25rem;
+            }
+            footer a {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="menu-icon" onclick="toggleSidebar()">&#9776;</div>
+    <h1>Mosfly App</h1>
+</header>
+
+<nav>
+    <a href="index.html">Inicio</a>
+    <a href="conocenos.html">Conócenos</a>
+    <a href="zona.html">Zona Mosfly</a>
+    <a href="https://manuelnuevounity.github.io/Pruebaunos/">Experiencia VR</a>
+    <a href="prevencion.html">Medidas de Prevención Mosfly</a>
+
+</nav>
+
+<div id="mySidebar" class="sidebar">
+    <img src="Captura de pantalla (125).png" alt="App Image">
+    <a href="index.html" style="text-align: center;">Inicio</a>
+    <a href="zona.html" style="text-align: center;">Tipos de Zancudos</a>
+    <a href="Reaccion.html" style="text-align: center;">Reacción de Enfermedades</a>
+    <a href="iareco.html">IA Detectora de Zona Mosfly</a>
+
+</div>
+
+
+<div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+
+<div class="main">
+    <div class="card">
+        <img src="zika.jpg" alt="Aedes aegypti">
+        <h3>Zika</h3>
+        <p>Síntomas: Los síntomas más comunes son fiebre leve, sarpullido, dolor muscular y articular, conjuntivitis, malestar general y, en algunos casos, dolor de cabeza.
+            Complicaciones: En casos raros, el Zika puede causar complicaciones graves como el síndrome de Guillain-Barré en adultos y malformaciones congénitas como la microcefalia en bebés nacidos de madres infectadas durante el embarazo.</p>
+        
+    </div>
+    <div class="card">
+        <img src="Malaria_Juice.avif" alt="Culex quinquefasciatus">
+        <h3>Malaria</h3>
+        <p>Síntomas: Inicialmente, fiebre, escalofríos, sudoración intensa, dolor de cabeza y malestar general. Los ciclos de fiebre pueden repetirse cada 48 a 72 horas, dependiendo del tipo de parásito.
+            Complicaciones: Si no se trata, la malaria puede afectar órganos vitales y causar complicaciones graves, especialmente en niños pequeños y mujeres embarazadas.</p>
+        
+    </div>
+    <div class="card">
+        <img src="dengue.avif" alt="Anopheles">
+        <h3>Dengue</h3>
+        <p>Síntomas: Comienza con fiebre alta, dolor de cabeza, dolor detrás de los ojos, dolores musculares y articulares, náuseas, vómitos, y erupción cutánea.
+            Complicaciones: Puede evolucionar a dengue grave (anteriormente conocido como dengue hemorrágico), que es potencialmente mortal debido a la pérdida de líquidos, hemorragias y problemas orgánicos.</p>
+    </div>
+    
+</div>
+
+<footer>
+    <a href="desarrolladores.html">Desarrolladores</a>
+    <a href="iareco.html">IA Detectora de Zona Mosfly</a>
+    <a href="reconocermosco.html">IA RECONOCEDOR TIPO DE MOSQUITOS</a>
+
+</footer>
+
+<script>
+    function toggleSidebar() {
+        var sidebar = document.getElementById("mySidebar");
+        var overlay = document.getElementById("overlay");
+        if (sidebar.style.width === "250px") {
+            sidebar.style.width = "0";
+            setTimeout(function() {
+                overlay.style.display = "none";
+            }, 500); 
+        } else {
+            sidebar.style.width = "250px";
+            overlay.style.display = "block";
+        }
+    }
+
+    showSlide(currentSlide);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detector de Mosquitos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        #camera {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            border: 5px solid #8c1936;
+            border-radius: 10px;
+        }
+
+        #capture {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #CF945A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #snapshot {
+            margin-top: 20px;
+            max-width: 100%;
+            border: 5px solid #8c1936;
+            border-radius: 10px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        #cameras {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #8c1936;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Detector de Mosquitos</h1>
+    <select id="cameras"></select>
+    <video id="camera" autoplay></video>
+    <button id="capture">Capturar Imagen</button>
+    <canvas id="snapshot" style="display:none;"></canvas>
+    <div id="result"></div>
+
+    <!-- Incluir TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+    
+    <script>
+        // Listar las cámaras disponibles y permitir al usuario elegir una
+        async function getCameras() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                const camerasSelect = document.getElementById('cameras');
+
+                videoDevices.forEach(device => {
+                    const option = document.createElement('option');
+                    option.value = device.deviceId;
+                    option.text = device.label || `Cámara ${camerasSelect.length + 1}`;
+                    camerasSelect.appendChild(option);
+                });
+
+                camerasSelect.addEventListener('change', startCamera);
+                startCamera(); // Iniciar con la cámara seleccionada por defecto
+            } catch (err) {
+                console.error('Error al obtener las cámaras: ', err);
+            }
+        }
+
+        // Iniciar la cámara seleccionada
+        async function startCamera() {
+            try {
+                const video = document.getElementById('camera');
+                const camerasSelect = document.getElementById('cameras');
+                const selectedCameraId = camerasSelect.value;
+
+                if (selectedCameraId) {
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: { deviceId: selectedCameraId }
+                    });
+                    video.srcObject = stream;
+                }
+            } catch (err) {
+                console.error('Error al iniciar la cámara: ', err);
+            }
+        }
+
+        // Cargar la lista de cámaras cuando la página se cargue
+        window.onload = getCameras;
+
+        // Capturar la imagen y hacer la predicción
+        const captureButton = document.getElementById('capture');
+        const canvas = document.getElementById('snapshot');
+        const resultDiv = document.getElementById('result');
+
+        let model;
+
+        // Cargar el modelo MobileNet
+        mobilenet.load().then(loadedModel => {
+            model = loadedModel;
+            console.log('Modelo cargado');
+        });
+
+        captureButton.addEventListener('click', () => {
+            const video = document.getElementById('camera');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Convertir la imagen del canvas a un tensor
+            const imageTensor = tf.browser.fromPixels(canvas);
+
+            // Hacer la predicción
+            model.classify(imageTensor).then(predictions => {
+                console.log('Predicciones: ', predictions);
+                // Traducir resultados al español (básico)
+                const traducciones = {
+                    "mosquito": "Mosquito",
+                    "insect": "Insecto",
+                    "animal": "Animal",
+                    "person": "Persona"
+                    // Agregar más traducciones según sea necesario
+                };
+
+                const resultadoEnEspañol = traducciones[predictions[0].className.toLowerCase()] || predictions[0].className;
+                resultDiv.innerHTML = `Predicción: ${resultadoEnEspañol} <br> 
+                                       Probabilidad: ${(predictions[0].probability * 100).toFixed(2)}%`;
+            }).catch(err => {
+                console.error('Error al hacer la predicción: ', err);
+            });
+        });
+    </script>
+
+</body>
+</html>

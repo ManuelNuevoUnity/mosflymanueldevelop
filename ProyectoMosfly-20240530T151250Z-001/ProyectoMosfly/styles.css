@@ -1,0 +1,114 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(43, 41, 41);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  nav {
+    background-color: rgb(43, 41, 41);
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+nav a {
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.875rem 1rem; /* Use rem for responsive size */
+    text-decoration: none;
+    font-size: 1rem; /* Use rem for responsive size */
+    margin: 0 0.625rem; /* Use rem for responsive size */
+    border: 0.1875rem solid white; /* Use rem for responsive size */
+    border-radius: 0.625rem; /* Use rem for responsive size */
+}
+nav a:hover {
+    background-color: #555;
+    color: white;
+}
+ 
+  
+  .container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1000px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+  }
+  
+  h1 {
+    flex: 1;
+    text-align: center;
+    color: #333;
+    font-size: 1.5rem;
+  }
+  
+  input[type="file"] {
+    flex: 1;
+    display: block;
+    margin: 0 10px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  button {
+    flex: 1;
+    display: block;
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: rgb(43, 184, 43);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-sizing: border-box;
+  }
+  
+  button:hover {
+    background-color: rgb(43, 184, 43);
+  }
+  
+  .result {
+    flex: 1;
+    margin-left: 10px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 1000px) {
+    .container {
+      flex-direction: column;
+    }
+  
+    h1 {
+      font-size: 1.2rem;
+    }
+  
+    input[type="file"], button, .result {
+      width: 100%;
+      margin: 10px 0;
+      padding: 8px;
+      font-size: 14px;
+    }
+  
+    .result {
+      font-size: 0.9rem;
+      margin-left: 0;
+    }
+  }
+  

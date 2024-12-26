@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mosfly App - Medidas de Prevención</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: rgb(163, 201, 159);
+
+        }
+        header {
+            background-color: forestgreen;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
+            height: 70px;
+        }
+        .menu-icon {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+        }
+        nav {
+            background-color: rgb(43, 41, 41);
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            box-sizing: border-box;
+        }
+        nav a {
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 0.875rem 1rem;
+            text-decoration: none;
+            font-size: 1rem;
+            margin: 0 0.625rem;
+            border: 0.1875rem solid white;
+            border-radius: 0.625rem;
+        }
+        nav a:hover {
+            background-color: #555;
+            color: white;
+        }
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgb(43, 184, 43);
+            overflow-x: hidden;
+            overflow-y: auto;
+            transition: 0.5s;
+            padding-top: 3.75rem;
+            z-index: 1;
+            box-sizing: border-box;
+            border-radius: 10px;
+        }
+        .sidebar a {
+            padding: 0.5rem 1rem; /* Reducir el padding */
+            margin: 0.5rem 0; /* Agregar un poco de margen entre los enlaces */
+            text-decoration: none;
+            font-size: 1.25rem;
+            color: black;
+            font-weight: bold;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+        .sidebar img {
+            display: block;
+            margin: 0 auto 1.25rem auto;
+            width: 50%;
+            border-radius: 50%;
+        }
+        .main {
+            flex: 1;
+            padding: 1rem;
+            transition: margin-left 0.5s;
+            box-sizing: border-box;
+        }
+        .overlay {
+            position: fixed;
+            display: none;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        footer {
+            background-color: rgb(43, 41, 41);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 1.25rem;
+            box-sizing: border-box;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+            padding: 0.625rem 1.25rem;
+            background-color: #555;
+            border-radius: 0.3125rem;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        footer a:hover {
+            background-color: #777;
+        }
+        .carousel {
+            position: relative;
+            max-width: 100%;
+            margin: 1.25rem auto;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        .carousel img {
+            width: 50%;
+            display: block;
+        }
+        .carousel-content {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-buttons {
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+        .carousel-buttons button {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            font-size: 1.125rem;
+            padding: 0.625rem;
+            cursor: pointer;
+        }
+        .carousel-buttons button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .prevention-section {
+            margin: 1.25rem 0;
+        }
+        .prevention-item {
+            background-color:white;
+            padding: 1rem;
+            margin-bottom: 0.625rem;
+            border-radius: 10px;
+        }
+        .prevention-item h3 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .menu-icon {
+                font-size: 1.25rem;
+                top: 10px;
+                left: 10px;
+            }
+            header h1 {
+                font-size: 1.25rem;
+            }
+            nav a {
+                padding: 0.625rem 0.75rem;
+                font-size: 0.875rem;
+            }
+            .sidebar a {
+                font-size: 1rem;
+                padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+            }
+            .carousel-buttons button {
+                font-size: 1rem;
+                padding: 0.5rem;
+            }
+            footer a {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .menu-icon {
+                font-size: 1rem;
+                top: 8px;
+                left: 8px;
+            }
+            header h1 {
+                font-size: 1rem;
+            }
+            nav a {
+                padding: 0.5rem 0.625rem;
+                font-size: 0.75rem;
+            }
+            .sidebar a {
+                font-size: 0.875rem;
+                padding: 0.375rem 0.375rem 0.375rem 1.25rem;
+            }
+            .carousel-buttons button {
+                font-size: 0.875rem;
+                padding: 0.375rem;
+            }
+            footer a {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="menu-icon" onclick="toggleSidebar()">&#9776;</div>
+    <h1 style="font-size: 25px; text-align: center; align-items: center; font-weight: bold;">Mosfly App</h1>
+</header>
+
+<nav>
+    <a href="index.html">Inicio</a>
+    <a href="conocenos.html">Conócenos</a>
+    <a href="zona.html">Zona Mosfly</a>
+    <a href="https://manuelnuevounity.github.io/Pruebaunos/">Experiencia VR</a>
+    <a href="prevencion.html">Medidas de Prevención Mosfly</a>
+
+</nav>
+
+<div id="mySidebar" class="sidebar">
+    <img src="Captura de pantalla (125).png" alt="App Image">
+    <a href="index.html" style="text-align: center;">Inicio</a>
+    <a href="zona.html" style="text-align: center;">Tipos de Zancudos</a>
+    <a href="Reaccion.html" style="text-align: center;">Reacción de Enfermedades</a>
+    <a href="iareco.html">IA Detectora de Zona Mosfly</a>
+
+</div>
+
+
+<div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+
+<div class="main">
+    <h2 style="font-weight: bold; text-align: center; font-size: 30px;">Medidas de Prevención</h2>
+
+    <div class="prevention-section">
+        <div class="prevention-item">
+            <h3>Uso de Repelentes</h3>
+            <div class="carousel">
+                <div class="carousel-content" id="carouselRepelentes">
+                    <img src="repelente-1200x800.jpg" alt="Repelente 1">
+                    <img src="recomendaciones-de-la-sap-para-el-uso-de-repelentes-100.jpg" alt="Repelente 2">
+                    <img src="tabasco.jpg" alt="Repelente 3">
+                </div>
+                <div class="carousel-buttons">
+                    <button onclick="prevSlide('carouselRepelentes')">&#10094;</button>
+                    <button onclick="nextSlide('carouselRepelentes')">&#10095;</button>
+                </div>
+            </div>
+            <p style="text-align: center;">Aplicar repelente en la piel expuesta y sobre la ropa para mantener alejados a los mosquitos.</p>
+        </div>
+        <div class="prevention-item">
+            <h3>Eliminación de Agua Estancada</h3>
+            <div class="carousel">
+                <div class="carousel-content" id="carouselAguaEstancada">
+                    <img src="R (1).jpg" alt="Agua Estancada 1">
+                    <img src="agua-estancada-colonia-juarez.jpg" alt="Agua Estancada 2">
+                    <img src="mapa.png" alt="Agua Estancada 3">
+                </div>
+                <div class="carousel-buttons">
+                    <button onclick="prevSlide('carouselAguaEstancada')">&#10094;</button>
+                    <button onclick="nextSlide('carouselAguaEstancada')">&#10095;</button>
+                </div>
+            </div>
+            <p style="text-align: center;">Vaciar, cubrir o eliminar recipientes que acumulen agua, ya que son lugares de cría para los mosquitos.</p>
+        </div>
+        <div class="prevention-item">
+            <h3>Mantenimiento de Jardines</h3>
+            <div class="carousel">
+                <div class="carousel-content" id="carouselJardines">
+                    <img src="mantenimiento-areas-verdes.png" alt="Jardín 1">
+                    <img src="Mantenimiento-de-Jardines.jpg" alt="Jardín 1">
+                </div>
+                <div class="carousel-buttons">
+                    <button onclick="prevSlide('carouselJardines')">&#10094;</button>
+                    <button onclick="nextSlide('carouselJardines')">&#10095;</button>
+                </div>
+            </div>
+            <p style="text-align: center;">Mantener el césped y las plantas recortadas para reducir las áreas donde los mosquitos pueden refugiarse.</p>
+        </div>
+        <div class="prevention-item">
+            <h3>Uso de Ropa Protectora</h3>
+            <div class="carousel">
+                <div class="carousel-content" id="carouselRopaProtectora">
+                    <img src="R (2).jpg" alt="Ropa Protectora 1">
+                    <img src="05985befb6d7109875fc824868e1f2385dfcf859_1024_1023.jpeg" alt="Ropa Protectora 1">
+                </div>
+                <div class="carousel-buttons">
+                    <button onclick="prevSlide('carouselRopaProtectora')">&#10094;</button>
+                    <button onclick="nextSlide('carouselRopaProtectora')">&#10095;</button>
+                </div>
+            </div>
+            <p style="text-align: center;">Usar ropa de manga larga y pantalones largos cuando esté al aire libre, especialmente durante las horas pico de actividad de los mosquitos.</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <a href="Reaccion.html">Reacción de Enfermedades</a>
+    <a href="zona.html">Tipos de Zancudos</a>
+    <a href="iareco.html">IA Detectora de Zona Mosfly</a>
+    <a href="reconocermosco.html">IA RECONOCER MOSQUITO</a>
+
+</footer>
+
+<script>
+    function toggleSidebar() {
+        var sidebar = document.getElementById("mySidebar");
+        var overlay = document.getElementById("overlay");
+        if (sidebar.style.width === "250px") {
+            sidebar.style.width = "0";
+            setTimeout(function() {
+                overlay.style.display = "none";
+            }, 500); 
+        } else {
+            sidebar.style.width = "250px";
+            overlay.style.display = "block";
+        }
+    }
+
+    showSlide(currentSlide);
+
+    let slideIndex = {
+        'carouselRepelentes': 0,
+        'carouselAguaEstancada': 0,
+        'carouselJardines': 0,
+        'carouselRopaProtectora': 0
+    };
+
+    function showSlide(carouselId, index) {
+        const slides = document.getElementById(carouselId).children;
+        if (index >= slides.length) slideIndex[carouselId] = 0;
+        if (index < 0) slideIndex[carouselId] = slides.length - 1;
+        for (let i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slides[slideIndex[carouselId]].style.display = "block";
+    }
+
+    function prevSlide(carouselId) {
+        showSlide(carouselId, slideIndex[carouselId] -= 1);
+    }
+
+    function nextSlide(carouselId) {
+        showSlide(carouselId, slideIndex[carouselId] += 1);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        for (let carousel in slideIndex) {
+            showSlide(carousel, slideIndex[carousel]);
+        }
+    });
+</script>
+
+</body>
+</html>
